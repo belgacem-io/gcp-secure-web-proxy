@@ -61,7 +61,8 @@ acl bypass_scan_types_rep rep_mime_type -i ^.*application\/x-mms-framed.*$
 loadable_modules /usr/local/lib/ecap_clamav_adapter.so
 ecap_service clamav_service_req reqmod_precache uri=ecap://e-cap.org/ecap/services/clamav?mode=REQMOD bypass=off
 ecap_service clamav_service_resp respmod_precache uri=ecap://e-cap.org/ecap/services/clamav?mode=RESPMOD bypass=on
-adaptation_access clamav_service_req allow !bypass_scan_
+adaptation_access clamav_service_req allow !bypass_scan_types_req all
+adaptation_access clamav_service_resp allow !bypass_scan_types_rep all
 EOF
 
 # patch the CL_SCAN_STDOPT error
