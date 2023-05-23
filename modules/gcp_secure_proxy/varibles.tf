@@ -28,12 +28,6 @@ variable "environment_code" {
   type        = string
 }
 
-variable "websafety_version" {
-  description = "Web safety version, https://www.diladele.com/"
-  type        = string
-  default = "8.5"
-}
-
 variable "instance_type" {
   description = "The instance type"
   type        = string

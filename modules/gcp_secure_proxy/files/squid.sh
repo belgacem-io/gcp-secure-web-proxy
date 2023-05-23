@@ -31,5 +31,8 @@ rm $OVERRIDE_CNF
 echo "[Service]"         >> $OVERRIDE_CNF
 echo "LimitNOFILE=65535" >> $OVERRIDE_CNF
 
+# Allow access from internal network
+echo "http_access allow localnet" > /etc/squid/conf.d/custom.conf
+
 # and reload the systemd
 systemctl daemon-reload
