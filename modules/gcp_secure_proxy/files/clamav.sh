@@ -38,6 +38,32 @@ cat << 'EOF' > ClamAv.cc.patch
          answer.statusCode = Answer::scClean;
 EOF
 
+cat << 'EOF' > /etc/squid/conf.d/clamav.conf
+ecap_enable on
+
+# Bypass scan mime-types
+acl bypass_scan_types_req req_mime_type -i ^text/
+acl bypass_scan_types_req req_mime_type -i ^application/x-javascript
+acl bypass_scan_types_req req_mime_type -i ^application/x-shockwave-flash
+acl bypass_scan_types_req req_mime_type -i ^image/
+acl bypass_scan_types_req req_mime_type -i ^video
+acl bypass_scan_types_req req_mime_type -i ^audio
+acl bypass_scan_types_req req_mime_type -i ^.*application\/x-mms-framed.*$
+
+acl bypass_scan_types_rep rep_mime_type -i ^text/
+acl bypass_scan_types_rep rep_mime_type -i ^application/x-javascript
+acl bypass_scan_types_rep rep_mime_type -i ^application/x-shockwave-flash
+acl bypass_scan_types_rep rep_mime_type -i ^image/
+acl bypass_scan_types_rep rep_mime_type -i ^video
+acl bypass_scan_types_rep rep_mime_type -i ^audio
+acl bypass_scan_types_rep rep_mime_type -i ^.*application\/x-mms-framed.*$
+
+loadable_modules /usr/local/lib/ecap_clamav_adapter.so
+ecap_service clamav_service_req reqmod_precache uri=ecap://e-cap.org/ecap/services/clamav?mode=REQMOD bypass=off
+ecap_service clamav_service_resp respmod_precache uri=ecap://e-cap.org/ecap/services/clamav?mode=RESPMOD bypass=on
+adaptation_access clamav_service_req allow !bypass_scan_
+EOF
+
 # patch the CL_SCAN_STDOPT error
 patch ecap_clamav_adapter-2.0.0/src/ClamAv.cc < ClamAv.cc.patch
 
