@@ -1,0 +1,12 @@
+#cloud-config
+runcmd:
+  - add-apt-repository universe
+  - apt update
+  # Install Squid 5 with HTTPS Decryption: https://docs.diladele.com/administrator_guide_stable/install/ubuntu20/squid.html
+  - curl -L https://raw.githubusercontent.com/diladele/websafety/${websafety_version}/core.ubuntu20/02_squid.sh | bash
+  # Install clamav and clamav squid Adapter : https://docs.diladele.com/administrator_guide_stable/install/ubuntu20/clamav.html
+  - curl -L https://raw.githubusercontent.com/diladele/websafety/${websafety_version}/core.ubuntu20/03_clamav.sh | bash
+  # Allow access from internal network
+  - echo "http_access allow localnet" > /etc/squid/conf.d/custom.conf
+  - systemctl restart squid
+  - sysctl -p
