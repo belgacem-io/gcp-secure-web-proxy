@@ -1,24 +1,30 @@
 #cloud-config
 write_files:
-  - path: /tmp/squid.sh
+  - path: /opt/scripts/squid.sh
     permissions: "0644"
     owner: root
     content: |
       ${indent(6, squid_install_content)}
 
-  - path: /tmp/clamav.sh
+  - path: /opt/scripts/clamav.sh
     permissions: "0644"
     owner: root
     content: |
       ${indent(6, clamav_install_content)}
+
+  - path: /opt/scripts/squidguard.sh
+    permissions: "0644"
+    owner: root
+    content: |
+      ${indent(6, squidguard_install_content)}
 
 #cloud-config
 runcmd:
   - add-apt-repository universe
   - apt update
   # Install Squid 5 with HTTPS Decryption
-  -  cat /tmp/squid.sh | bash
+  -  cat /opt/scripts/squid.sh | bash
   # Install clamav and clamav squid Adapter
-  - cat /tmp/clamav.sh | bash
+  - cat /opt/scripts/clamav.sh | bash
   - systemctl restart squid
   - sysctl -p

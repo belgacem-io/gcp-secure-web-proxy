@@ -30,6 +30,7 @@ module "proxy_template" {
     user-data = templatefile("${path.module}/files/squid.yaml", {
       squid_install_content       = file("${path.module}/files/squid.sh")
       clamav_install_content      = file("${path.module}/files/clamav.sh")
+      squidguard_install_content  = file("${path.module}/files/squidguard.sh")
     })
   }
   source_image_family  = split("/", var.instance_image)[1]
