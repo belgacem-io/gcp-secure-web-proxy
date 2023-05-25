@@ -2,7 +2,7 @@
   Secure web proxy.
  *****************************************/
 module "secure_web_proxy" {
-  source = "../gcp_secure_proxy"
+  source = "../gcp_squid_proxy"
 
   count = (var.mode == "hub" && var.enable_secure_web_proxy) ? 1 : 0
 
